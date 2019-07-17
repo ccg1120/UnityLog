@@ -6,64 +6,70 @@ using System.IO;
 
 namespace Choe
 {
-    public class UnityLog : Editor {
+    public class UnityLog  {
 
-        [SerializeField]
         private static string m_EditorLogStateKey = "m_LogOn";
 
         private static bool m_LogOn = false;
 
         private static bool m_LogStart = false;
-        private static bool m_TestLogFuc = false;
+        
 
         private static uint m_LogCount = 0;
+
         #region LogTestMenu
-        [MenuItem("Test/Log %&q")]
-        public static void TestLog()
-        {
-            Debug.Log("Test Log");
-        }
+        //private static bool m_TestLogFuc = false;
+        //[MenuItem("Test/Log %&q")]
+        //public static void TestLog()
+        //{
+        //    Debug.Log("Test Log");
+        //}
 
-        [MenuItem("Test/ErrorLog %&w")]
-        public static void UnityErrorLog()
-        {
-            Debug.LogError("Unity LogError");
-            
-        }
+        //[MenuItem("Test/ErrorLog %&w")]
+        //public static void UnityErrorLog()
+        //{
+        //    Debug.LogError("Unity LogError");
+
+        //}
 
 
-        [MenuItem("Test/WarningLog %&e")]
-        public static void UnityWarningLog()
-        {
-            Debug.LogWarning("Unity Warning");
-        }
-        [MenuItem("Test/AllLog %&a")]
-        public static void UnityAllLog()
-        {
-            TestLog();
-            UnityErrorLog();
-            UnityWarningLog();
-        }
+        //[MenuItem("Test/WarningLog %&e")]
+        //public static void UnityWarningLog()
+        //{
+        //    Debug.LogWarning("Unity Warning");
+        //}
+        //[MenuItem("Test/AllLog %&a")]
+        //public static void UnityAllLog()
+        //{
+        //    TestLog();
+        //    UnityErrorLog();
+        //    UnityWarningLog();
+        //}
 
-        [MenuItem("Test/LoopLog")]
-        public static void UnityLoop()
-        {
-            m_TestLogFuc = !m_TestLogFuc;
-            if (m_TestLogFuc)
-            {
-                EditorApplication.update += UpdateTest;
-            }
-            else
-            {
-                EditorApplication.update -= UpdateTest;
-            }
-            
-        }
+        //[MenuItem("Test/LoopLog")]
+        //public static void UnityLoop()
+        //{
+        //    m_TestLogFuc = !m_TestLogFuc;
+        //    if (m_TestLogFuc)
+        //    {
+        //        EditorApplication.update += UpdateTest;
+        //    }
+        //    else
+        //    {
+        //        EditorApplication.update -= UpdateTest;
+        //    }
 
-        public UnityLog()
-        { 
-            Debug.Log("Unity Log ");
-        }
+        //}
+
+        //public UnityLog()
+        //{ 
+        //    Debug.Log("Unity Log ");
+        //}
+        //public static void UpdateTest()
+        //{
+        //    UnityAllLog();
+        //}
+
         #endregion
 
         [MenuItem("Log/Open Folder %&o")]
@@ -80,7 +86,7 @@ namespace Choe
 
             if (value)
             {
-                EditorPrefs.SetBool(m_EditorLogStateKey, false);
+                EditorPrefs.SetBool(m_EditorLogStateKey, false);               
                 Debug.Log("Log Write Off !!");
             }
             else
@@ -89,7 +95,7 @@ namespace Choe
                 Debug.LogError("Log Write On !!");
             }
         }
-       
+
         [RuntimeInitializeOnLoadMethod]
         public static void PlayLogEvent()
         {
@@ -105,6 +111,7 @@ namespace Choe
         {
             EditorApplication.playModeStateChanged += (mode)=> PlayModeEvent(mode);
         }
+
         private static void PlayModeEvent(PlayModeStateChange mode)
         {
             switch (mode)
@@ -121,12 +128,6 @@ namespace Choe
                     break;
             }
         }
-
-        public static void UpdateTest()
-        {
-            UnityAllLog();
-        }
-
 
         private static void LogEvent(string mes, string trace, LogType type)
         {
