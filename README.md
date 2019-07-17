@@ -15,11 +15,11 @@ CSV 형태로 제공 되며 엑셀을 통해서 검색 및 필터를 적용 하�
 ## 사용방법
 
 1. 유니티 프로젝트 상단 메뉴에 Log 메뉴를 확인 할 수 있다.
-![first](Images/sample.JPG)
+![first](Images/sample.jpg)
 
 2. Open folder, Write 메뉴가 있다.
-![first](Images/sample2.JPG)
 
+    ![first](Images/sample2.jpg)
 
     Open folder : CSV 파일들이 저장 되는 폴더를 연다 (Ctrl + Alt + o)
 
@@ -31,4 +31,4 @@ CSV 형태로 제공 되며 엑셀을 통해서 검색 및 필터를 적용 하�
 
 ## 결과물 예시
 
-![Result](Images/sample3.JPG)
+![Result](Images/sample3.jpg)
