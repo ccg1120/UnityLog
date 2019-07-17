@@ -8,11 +8,15 @@ namespace Choe
 {
     public class UnityLog : Editor {
 
-       
-        private static List<LogMessage> LogList = new List<LogMessage>();
-        private static bool LogOn = true;
+        [SerializeField]
+        private static string m_EditorLogStateKey = "m_LogOn";
 
+        private static bool m_LogOn = false;
 
+        private static bool m_LogStart = false;
+        private static bool m_TestLogFuc = false;
+
+        private static uint m_LogCount = 0;
         #region LogTestMenu
         [MenuItem("Test/Log %&q")]
         public static void TestLog()
@@ -24,6 +28,7 @@ namespace Choe
         public static void UnityErrorLog()
         {
             Debug.LogError("Unity LogError");
+            
         }
 
 
@@ -40,24 +45,61 @@ namespace Choe
             UnityWarningLog();
         }
 
+        [MenuItem("Test/LoopLog")]
+        public static void UnityLoop()
+        {
+            m_TestLogFuc = !m_TestLogFuc;
+            if (m_TestLogFuc)
+            {
+                EditorApplication.update += UpdateTest;
+            }
+            else
+            {
+                EditorApplication.update -= UpdateTest;
+            }
+            
+        }
+
         public UnityLog()
         { 
             Debug.Log("Unity Log ");
         }
         #endregion
 
+        [MenuItem("Log/Open Folder %&o")]
+        public static void OpenFolder()
+        {
+            UnityLogFileUtility.OpenLogFolder();
+        }
+
+
+        [MenuItem("Log/Write")]
+        public static void ChangeLogState()
+        {
+            bool value = EditorPrefs.GetBool(m_EditorLogStateKey);
+
+            if (value)
+            {
+                EditorPrefs.SetBool(m_EditorLogStateKey, false);
+                Debug.Log("Log Write Off !!");
+            }
+            else
+            {
+                EditorPrefs.SetBool(m_EditorLogStateKey, true);
+                Debug.LogError("Log Write On !!");
+            }
+        }
+       
         [RuntimeInitializeOnLoadMethod]
         public static void PlayLogEvent()
         {
-            Debug.Log("RuntimeInitializeOnLoadMethod");
-            Debug.Log("LogOn : " + LogOn);
-            if(LogOn)
+            m_LogOn = EditorPrefs.GetBool(m_EditorLogStateKey);
+            
+            if (m_LogOn)
             {
                 EditorModeChangeEvent();
             }
         }
-
-     
 
         private static void EditorModeChangeEvent()
         {
@@ -72,58 +114,50 @@ namespace Choe
                 case PlayModeStateChange.ExitingEditMode:
                     break;
                 case PlayModeStateChange.EnteredPlayMode:
-                    ClearLogList();
-                    EditorApplication.update += UpdataLoop;
                     AddLogEvent();
                     break;
                 case PlayModeStateChange.ExitingPlayMode:
-                    EditorApplication.update -= UpdataLoop;
                     RemoveLogEvent();
-                    SaveLogFile();
                     break;
             }
         }
 
-        private static void UpdataLoop()
+        public static void UpdateTest()
         {
-            if (EditorApplication.isPlaying)
-            {
-                Debug.Log("is playing ");
-            }
-            else
-            {
-                Debug.Log("is Not  playing ");
-            }
-            
+            UnityAllLog();
         }
+
+
         private static void LogEvent(string mes, string trace, LogType type)
         {
-            uint num = (uint)LogList.Count;
+            uint num = m_LogCount;
+
             LogMessage temp = new LogMessage(num, mes, trace, type);
-            LogList.Add(temp);
-            Debug.Log("LogEvent " + mes);
+           
+            UnityLogFileUtility.WriteMessage(LogCSV.CSVTypeString(temp));
+            m_LogCount++;
         }
 
         private static void AddLogEvent()
         {
-            Application.logMessageReceived += LogEvent;
+            if(UnityLogFileUtility.CreateLogFile())
+            {
+                m_LogCount = 0;
+                Application.logMessageReceived += LogEvent;
+                m_LogStart = true;
+            }
+            
         }
+
         private static void RemoveLogEvent()
         {
-            Application.logMessageReceived -= LogEvent;
+            if(m_LogStart)
+            {
+                Application.logMessageReceived -= LogEvent;
+                UnityLogFileUtility.CloseLogFile();
+                m_LogCount = 0;
+                m_LogStart = false;                
+            }
         }
-
-
-        private static void ClearLogList()
-        {
-            LogList.Clear();
-        }
-            
-        private static void SaveLogFile()
-        {
-
-        }
-
-
     }
 }
