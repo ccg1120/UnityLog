@@ -18,8 +18,8 @@ CSV 형태로 제공 되며 엑셀을 통해서 검색 및 필터를 적용 하�
 ![first](Images/sample.jpg)
 
 2. Open folder, Write 메뉴가 있다.
-![first](Images/sample2.jpg)
 
+    ![first](Images/sample2.jpg)
 
     Open folder : CSV 파일들이 저장 되는 폴더를 연다 (Ctrl + Alt + o)
 
