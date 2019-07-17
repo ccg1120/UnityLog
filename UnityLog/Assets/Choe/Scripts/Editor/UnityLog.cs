@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
+/// <summary>
+/// Unity log CSV Writer 
+/// 2019_07_17
+/// Choe chung hyun
+/// E-mail = ccg1120@naver.com
+/// </summary>
 namespace Choe
 {
     public class UnityLog  {
