@@ -10,6 +10,7 @@ namespace Choe
         private static string m_LogSaveFolder = "Logs";
         private static string m_LogFileNameBase = "Log_";
         private static string m_LogFileType = ".csv";
+
         private static string m_LogSaveFolderPath = string.Empty;
 
         private static FileStream m_FileStream;
@@ -23,7 +24,6 @@ namespace Choe
             Check_SaveLogFolder();
         }
 
-        
         public static void OpenLogFolder()
         {
             Application.OpenURL(m_LogSaveFolderPath);
@@ -34,7 +34,7 @@ namespace Choe
         {
             try
             {
-                string filename = LogFileName();
+                string filename = GetLogFileName();
                 string filepath = Path.Combine(m_LogSaveFolderPath, filename);
                 Debug.Log("Create File Path = " + filepath);
                 m_FileStream = File.Create(filepath);
@@ -94,7 +94,8 @@ namespace Choe
                 info.Create();
             }   
         }
-        private static string LogFileName()
+
+        private static string GetLogFileName()
         {
             string name = m_LogFileNameBase + DateTime.Now.ToString("MMdd_hh_mm_ss") + m_LogFileType;
             return name;
